@@ -1,14 +1,6 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
-
-#define MAX_TODO_TITLE_LENGTH 32
-#define MAX_TODOS 10
-
-typedef struct {
-  char title[MAX_TODO_TITLE_LENGTH];
-  bool completed;
-} TodoItem;
+#include "todo.h"
 
 enum Command {
   ADD = 'a',
@@ -17,26 +9,6 @@ enum Command {
   QUIT = 'q'
 };
 
-TodoItem create_todo(const char *title) {
-  TodoItem item;
-  strncpy(item.title, title, MAX_TODO_TITLE_LENGTH);
-  item.completed = false;
-  return item;
-}
-
-void mark_todo(TodoItem *item, bool completed) {
-  (*item).completed = completed;
-}
-
-void print_todo(TodoItem item) {
-  printf("%s - ", item.title);
-  if (item.completed) {
-    printf("Completed\n");
-  } else {
-    printf("Not Completed\n");
-  }
-}
-
 TodoItem todos[MAX_TODOS];
 int todos_count = 0;
 
@@ -44,6 +16,8 @@ void add_todo() {
   char title[MAX_TODO_TITLE_LENGTH];
   printf("Enter todo title: ");
   fgets(title, MAX_TODO_TITLE_LENGTH - 1, stdin);
+  // remove the newline character from the buffer
+  title[strlen(title) - 1] = '\0';
 
   TodoItem item = create_todo(title);
   todos[todos_count] = item;
@@ -52,7 +26,7 @@ void add_todo() {
 
 void print_all_todos() {
   for (int i = 0; i < todos_count; i++) {
-    print_todo(todos[i]);
+    print_todo(&todos[i]);
   }
 }
 

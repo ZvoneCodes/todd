@@ -6,6 +6,7 @@ enum Command {
   ADD = 'a',
   MARK = 'm',
   PRINT = 'p',
+  REMOVE = 'r',
   QUIT = 'q'
 };
 
@@ -28,6 +29,13 @@ void print_all_todos() {
   for (int i = 0; i < todos_count; i++) {
     print_todo(&todos[i]);
   }
+}
+
+void remove_todo_at_index(int index) {
+  for (int i = index; i < todos_count - 1; i++) {
+    todos[i] = todos[i + 1];
+  }
+  todos_count--;
 }
 
 int main(int argc, char **argv) {
@@ -57,6 +65,13 @@ int main(int argc, char **argv) {
       case PRINT:
         print_all_todos();
         break;
+      case REMOVE:
+        do {
+          printf("Enter todo index: ");
+          op_index = getc(stdin) - '0';
+          getc(stdin); // remove the newline character from the buffer
+        } while (op_index < 0 || op_index >= todos_count);
+        remove_todo_at_index(op_index);
       case QUIT:
         break;
       default:

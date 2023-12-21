@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "engine/todo.h"
 
-#define MAX_TODOS 10
+#define MAX_TODOS UINT_MAX
 #define SAVE_FILE "todos.todd"
 #define STB_DS_IMPLEMENTATION
 
@@ -83,6 +84,49 @@ void write_to_file_handler() {
   fclose(file);
 }
 
+void load_from_file_handler() {
+  FILE *file = fopen(SAVE_FILE, "rb");
+  char magic[5] = {'\0'};
+  int todos_count = 0;
+  int bs = 0;
+  // check the "TODD" (without the \0) magic value
+  fread(magic, sizeof(char), 4, file);
+  if (strcmp(magic, "TODD") != 0) {
+    printf("Invalid file format\nExpected TODD, got %s\n", magic);
+    return;
+  }
+
+  // read the number of todos
+  fread(&todos_count, sizeof(int), 1, file);
+
+  // read each todo
+  for (int i = 0; i < todos_count; i++) {
+    // read the title length
+    unsigned char title_length = 0;
+    fread(&title_length, sizeof(unsigned char), 1, file);
+
+    // read the title
+    char *title = malloc(title_length + 1);
+    fread(title, sizeof(char), title_length, file);
+    title[title_length] = '\0';
+
+    // read the completed flag
+    bool_t completed = false;
+    fread(&completed, sizeof(bool_t), 1, file);
+
+    // create the todo item
+    TodoItem item = todo_create_item(title);
+
+    // mark the item as completed if needed
+    if (completed) {
+      todo_mark_item(&item, true);
+    }
+
+    // add the item to the list
+    arrput(todos, item);
+  }
+}
+
 int main(int argc, char **argv) {
   char cmd;
 
@@ -93,10 +137,6 @@ int main(int argc, char **argv) {
 
     switch (cmd) {
       case ADD:
-        /* if (list_length(&todos) + 1 > MAX_TODOS) { */
-          /* printf("No more space for new todos\n"); */
-          /* break; */
-        /* } */
         add_command_handler();
         break;
       case MARK:
@@ -110,6 +150,9 @@ int main(int argc, char **argv) {
         break;
       case WRITE_TO_FILE:
         write_to_file_handler();
+        break;
+      case LOAD_FROM_FILE:
+        load_from_file_handler();
         break;
       case QUIT:
         break;

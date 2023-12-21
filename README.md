@@ -7,9 +7,9 @@ Just run: `./build.sh` and run `./todd` after that.
 
 # Ideas
 
-- [ ] Save todos to disk
-- [ ] Smarter way to organize todos (instead of global array)
+- [x] Save todos to disk
+- [x] Smarter way to organize todos (instead of global array)
 - [ ] Add a TUI
 
 # Attributions
-- https://gist.github.com/meylingtaing/11018042
+- STB: https://github.com/nothings/stb

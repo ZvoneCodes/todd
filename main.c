@@ -163,11 +163,11 @@ int main(int argc, char **argv) {
 
   } while (cmd != QUIT);
   
+  for (int i = 0; i < arrlen(todos); i++) {
+    todo_free_item(&todos[i]);
+  }
+
   arrfree(todos);
 
-  /* for (int i = 0; i < list_length(&todos); i++) { */
-  /*   todo_free_item(list_get(&todos, i)); */
-  /* } */
-  /* list_free(&todos); */
-  /* free(todos); */
+  return 0;
 }

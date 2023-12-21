@@ -12,7 +12,7 @@ void todo_free_item(TodoItem *item) {
 TodoItem todo_create_item(char *title) {
   TodoItem item;
   item.title_length = strlen(title);
-  item.title = malloc(item.title_length);
+  item.title = malloc(item.title_length + 1);
   strcpy(item.title, title);
   item.completed = false;
 

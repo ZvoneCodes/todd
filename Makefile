@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := purge 
 
 todo.o:
-	cc -c todo.c -o todo.o
+	cc -c engine/todo.c -o todo.o
 
 main.o:
 	cc -c main.c -o main.o

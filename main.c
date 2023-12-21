@@ -1,33 +1,39 @@
 #include <stdio.h>
 #include <string.h>
-#include "todo.h"
+#include <stdlib.h>
+#include "engine/todo.h"
+
+#define MAX_TODOS 10
+#define SAVE_FILE "todos.todd"
 
 enum Command {
   ADD = 'a',
   MARK = 'm',
   PRINT = 'p',
   REMOVE = 'r',
-  QUIT = 'q'
+  QUIT = 'q',
+
+  SERIALIZE = 's'
 };
 
 TodoItem todos[MAX_TODOS];
 int todos_count = 0;
 
-void add_todo() {
-  char title[MAX_TODO_TITLE_LENGTH];
+void add_command_handler() {
+  char title[TODO_MAX_TITLE_LENGTH];
   printf("Enter todo title: ");
-  fgets(title, MAX_TODO_TITLE_LENGTH - 1, stdin);
+  fgets(title, TODO_MAX_TITLE_LENGTH - 1, stdin);
   // remove the newline character from the buffer
   title[strlen(title) - 1] = '\0';
 
-  TodoItem item = create_todo(title);
+  TodoItem item = todo_create_item(title);
   todos[todos_count] = item;
   todos_count++;
 }
 
 void print_all_todos() {
   for (int i = 0; i < todos_count; i++) {
-    print_todo(&todos[i]);
+    todo_print_item(&todos[i]);
   }
 }
 
@@ -41,6 +47,9 @@ void remove_todo_at_index(int index) {
 int main(int argc, char **argv) {
   char cmd;
   int op_index = -1;
+  int bs;
+  FILE *file;
+
   do {
     printf("Enter command: ");
     cmd = getc(stdin);
@@ -52,7 +61,7 @@ int main(int argc, char **argv) {
           printf("No more space for new todos\n");
           break;
         }
-        add_todo();
+        add_command_handler();
         break;
       case MARK:
         do {
@@ -60,7 +69,7 @@ int main(int argc, char **argv) {
           op_index = getc(stdin) - '0';
           getc(stdin); // remove the newline character from the buffer
         } while (op_index < 0 || op_index >= todos_count);
-        mark_todo(&todos[op_index], !todos[op_index].completed);
+        todo_mark_item(&todos[op_index], !todos[op_index].completed);
         break;
       case PRINT:
         print_all_todos();
@@ -72,6 +81,20 @@ int main(int argc, char **argv) {
           getc(stdin); // remove the newline character from the buffer
         } while (op_index < 0 || op_index >= todos_count);
         remove_todo_at_index(op_index);
+      case SERIALIZE:
+        file = fopen(SAVE_FILE, "wb");
+        // write a magic value "TODD" to the file
+        fwrite("TODD", sizeof(char), 4, file);
+        // write the number of todos to the file
+        fwrite(&todos_count, sizeof(int), 1, file);
+        // write each todo to the file
+        for (int i = 0; i < todos_count; i++) {
+          char *buffer = todo_item_serialize(&todos[i], &bs);
+          fwrite(buffer, sizeof(char), bs, file);
+          free(buffer);
+        }
+        fclose(file);
+        break;
       case QUIT:
         break;
       default:
@@ -80,4 +103,8 @@ int main(int argc, char **argv) {
     }
 
   } while (cmd != QUIT);
+
+  for (int i = 0; i < todos_count; i++) {
+    todo_free_item(&todos[i]);
+  }
 }

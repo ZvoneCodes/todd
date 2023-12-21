@@ -10,3 +10,6 @@ Just run: `./build.sh` and run `./todd` after that.
 - [ ] Save todos to disk
 - [ ] Smarter way to organize todos (instead of global array)
 - [ ] Add a TUI
+
+# Attributions
+- https://gist.github.com/meylingtaing/11018042

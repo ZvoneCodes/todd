@@ -1,16 +1,16 @@
-.DEFAULT_GOAL := purge 
+.DEFAULT_GOAL := all
 
 CC=gcc
+CFLAGS=-Wall -Wextra -Werror -pedantic -std=c99 -g
 
 todo.o:
-	$(CC) -c engine/todo.c -o todo.o
+	$(CC) $(CFLAGS) -c engine/todo.c -o todo.o
 
 main.o:
-	$(CC) -c main.c -o main.o
+	$(CC) $(CFLAGS) -c main.c -o main.o
 
-purge:
+clean:
 	rm -f *.o
-	make all
 
 all: todo.o main.o
-	$(CC) todo.o main.o -o todd
+	$(CC) $(CFLAGS) todo.o main.o -o todd

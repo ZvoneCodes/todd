@@ -23,7 +23,7 @@ enum Command {
   LOAD_FROM_FILE = 'l',
 };
 
-void add_command_handler() {
+void add_command_handler(void) {
   char title[TODO_MAX_TITLE_LENGTH];
   printf("Enter todo title: ");
   fgets(title, TODO_MAX_TITLE_LENGTH - 1, stdin);
@@ -34,7 +34,7 @@ void add_command_handler() {
   arrput(todos, item);
 }
 
-void mark_command_handler() {
+void mark_command_handler(void) {
   int op_index = -1;
   do {
     printf("Enter todo index: ");
@@ -49,14 +49,14 @@ void mark_command_handler() {
   todos[op_index] = item;
 }
 
-void print_command_handler() {
+void print_command_handler(void) {
   for (int i = 0; i < arrlen(todos); i++) {
     printf("%d. ", i);
     todo_print_item(&todos[i]);
   }
 }
 
-void remove_command_handler() {
+void remove_command_handler(void) {
   int op_index = -1;
   do {
     printf("Enter todo index: ");
@@ -67,7 +67,7 @@ void remove_command_handler() {
   arrdel(todos, op_index);
 }
 
-void write_to_file_handler() {
+void write_to_file_handler(void) {
   FILE *file = fopen(SAVE_FILE, "wb");
   int bs = 0;
   int todos_count = arrlen(todos);
@@ -84,11 +84,10 @@ void write_to_file_handler() {
   fclose(file);
 }
 
-void load_from_file_handler() {
+void load_from_file_handler(void) {
   FILE *file = fopen(SAVE_FILE, "rb");
   char magic[5] = {'\0'};
   int todos_count = 0;
-  int bs = 0;
   // check the "TODD" (without the \0) magic value
   fread(magic, sizeof(char), 4, file);
   if (strcmp(magic, "TODD") != 0) {
@@ -127,7 +126,7 @@ void load_from_file_handler() {
   }
 }
 
-int main(int argc, char **argv) {
+int main(void) {
   char cmd;
 
   do {

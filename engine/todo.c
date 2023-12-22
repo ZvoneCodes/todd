@@ -1,12 +1,10 @@
 #include "todo.h"
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Memory management
-void todo_free_item(TodoItem *item) {
-  free(item->title);
-}
+void todo_free_item(TodoItem *item) { free(item->title); }
 
 // Item operations
 TodoItem todo_create_item(char *title) {
@@ -38,7 +36,8 @@ char *todo_item_serialize(TodoItem *item, int *buffer_size_out) {
   // title_length - 1 byte
   // title - title_length bytes
   // completed - 1 byte
-  unsigned char title_length = item->title_length;  unsigned char completed_length = sizeof(item->completed);
+  unsigned char title_length = item->title_length;
+  unsigned char completed_length = sizeof(item->completed);
   int buffer_size = sizeof(unsigned char) + title_length + completed_length;
 
   char *buffer = malloc(buffer_size);
@@ -48,7 +47,8 @@ char *todo_item_serialize(TodoItem *item, int *buffer_size_out) {
   // copy title
   memcpy(buffer + sizeof(unsigned char), item->title, title_length);
   // copy completed
-  memcpy(buffer + sizeof(unsigned char) + title_length, &item->completed, completed_length);
+  memcpy(buffer + sizeof(unsigned char) + title_length, &item->completed,
+         completed_length);
 
   *buffer_size_out = buffer_size;
 

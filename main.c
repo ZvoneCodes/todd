@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
 #include "engine/todo.h"
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define MAX_TODOS UINT_MAX
 #define SAVE_FILE "todos.todd"
@@ -136,33 +136,33 @@ int main(int argc, char **argv) {
     getc(stdin); // remove the newline character from the buffer
 
     switch (cmd) {
-      case ADD:
-        add_command_handler();
-        break;
-      case MARK:
-        mark_command_handler();
-        break;
-      case PRINT:
-        print_command_handler();
-        break;
-      case REMOVE:
-        remove_command_handler();
-        break;
-      case WRITE_TO_FILE:
-        write_to_file_handler();
-        break;
-      case LOAD_FROM_FILE:
-        load_from_file_handler();
-        break;
-      case QUIT:
-        break;
-      default:
-        printf("Invalid command\n");
-        break;
+    case ADD:
+      add_command_handler();
+      break;
+    case MARK:
+      mark_command_handler();
+      break;
+    case PRINT:
+      print_command_handler();
+      break;
+    case REMOVE:
+      remove_command_handler();
+      break;
+    case WRITE_TO_FILE:
+      write_to_file_handler();
+      break;
+    case LOAD_FROM_FILE:
+      load_from_file_handler();
+      break;
+    case QUIT:
+      break;
+    default:
+      printf("Invalid command\n");
+      break;
     }
 
   } while (cmd != QUIT);
-  
+
   for (int i = 0; i < arrlen(todos); i++) {
     todo_free_item(&todos[i]);
   }

@@ -1,15 +1,10 @@
 # Todd
-Todd is a To-Do app written in C.
-
-To compile Todd you only need a C compiler.
-
-Just run: `./build.sh` and run `./todd` after that.
-
-# Ideas
-
-- [x] Save todos to disk
-- [x] Smarter way to organize todos (instead of global array)
-- [ ] Add a TUI
-
-# Attributions
-- STB: https://github.com/nothings/stb
+`todd` is a to-do app written in C.
+## Requirements
+- GCC
+- GNU Make
+## Building
+To build `todd` all you need to do is run `make`.
+## 3rd Party
+Todd uses the following dependencies:
+- stb_ds - https://github.com/nothings/stb

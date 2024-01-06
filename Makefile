@@ -13,4 +13,4 @@ clean:
 	rm -f *.o
 
 all: todo.o main.o
-	$(CC) $(CFLAGS) todo.o main.o -o todd
+	$(CC) $(CFLAGS) todo.o main.o -lncurses -o todd

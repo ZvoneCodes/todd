@@ -30,6 +30,9 @@ enum Command {
 
   UP = 'k',
   DOWN = 'j',
+
+  UP_ARROW = KEY_UP,
+  DOWN_ARROW = KEY_DOWN,
 };
 
 void clear_todos(void) {
@@ -57,6 +60,7 @@ void initialize_curses(int *width, int *height) {
   // where no buffering is performed on keyboard input
   cbreak();
   noecho();
+  keypad(stdscr, TRUE);
 }
 
 void draw_header(int width) {
@@ -317,12 +321,14 @@ int main(int argc, char **argv) {
         running = 0;
         break;
       case UP:
+      case UP_ARROW:
         current_line--;
         if (current_line < 0) {
           current_line = 0;
         }
         break;
       case DOWN:
+      case DOWN_ARROW:
         current_line++;
         if (current_line >= arrlen(todos)) {
           current_line = arrlen(todos) - 1;

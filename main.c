@@ -33,6 +33,7 @@ enum Command {
 
   UP_ARROW = KEY_UP,
   DOWN_ARROW = KEY_DOWN,
+  SPACE = ' '
 };
 
 void clear_todos(void) {
@@ -309,6 +310,7 @@ int main(int argc, char **argv) {
         add_command_handler(terminal_width, terminal_height);
         break;
       case MARK:
+      case SPACE:
         mark_command_handler(current_line);
         break;
       case REMOVE:

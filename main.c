@@ -75,9 +75,26 @@ void draw_header(int width) {
 
 void draw_footer(int width, int height) {
   move(height - 1, 0);
-  for (int i = 0; i < width - 1; i++) {
+  addch(' ');
+  int todos_count = arrlen(todos);
+  int marked_count = 0;
+
+  for (int i = 0; i < todos_count; i++) {
+    if (todos[i].completed) {
+      marked_count++;
+    }
+  }
+
+  // get the length of the string
+  int length = snprintf(NULL, 0, "%d/%d", marked_count, todos_count);
+  // print the string
+  printw("%d/%d", marked_count, todos_count);
+
+  // print the rest of the line
+  for (int i = length; i < width - 1; i++) {
     addch(' ');
   }
+
   attroff(COLOR_PAIR(BORDERS_PAIR));
 }
 

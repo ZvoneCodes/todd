@@ -159,7 +159,7 @@ void input_string(int terminal_width, int terminal_height, char *buffer, int buf
 
 void display_todos(int width, int height, int current_line) {
   int current_y = 1;
-  int current_index = current_line;
+  int current_index = 0;
   const char *padding = "...";
   unsigned long title_length = 0;
   unsigned long padding_length = strlen(padding);
@@ -168,9 +168,14 @@ void display_todos(int width, int height, int current_line) {
 
   attron(COLOR_PAIR(DEFAULT_PAIR));
 
-  // TODO: Use an offset or something
-
-  while(current_y < height - 2) {
+  // calculate the offset
+  if (height - 4 <= current_line) {
+    // ignore the first n todos
+    current_index = current_line - (height - 4);
+  }
+  
+  // while we have space to print todos
+  while (current_y < height - 2) {
     // check if we're out of bounds
     if (current_index >= arrlen(todos)) {
       break;

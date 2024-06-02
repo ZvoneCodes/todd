@@ -11,6 +11,13 @@ main.o:
 
 clean:
 	rm -f *.o
+	rm -f todd
+	rm /usr/local/bin/todd || true
 
-all: todo.o main.o
+todd: todo.o main.o
 	$(CC) $(CFLAGS) todo.o main.o -lncurses -o todd
+
+all: todd
+
+install: todd
+	cp todd /usr/local/bin/todd

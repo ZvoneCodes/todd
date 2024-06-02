@@ -18,7 +18,7 @@
 
 #include "3rd-party/stb-ds.h"
 
-char SAVE_FILE[MAX_PATH_LENGTH] = "todos.todd";
+char SAVE_FILE[MAX_PATH_LENGTH] = "";
 TodoItem *todos = NULL;
 
 enum Command {
@@ -70,8 +70,9 @@ void initialize_curses(int *width, int *height) {
 void draw_header(int width) {
   attron(COLOR_PAIR(BORDERS_PAIR));
   move(0, 0);
-  addstr(" Todd");
-  for (int i = strlen("Todd"); i < width - 1; i++) {
+  addstr(" Todd - ");
+  addstr(SAVE_FILE);
+  for (int i = strlen(" Todd - ") + strlen(SAVE_FILE); i < width - 1; i++) {
     addch(' ');
   }
 }

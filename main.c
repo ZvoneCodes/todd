@@ -256,6 +256,12 @@ void load_from_file_handler(void) {
   clear_todos();
 
   FILE *file = fopen(SAVE_FILE, "rb");
+
+  // if unable to open the file, return
+  if (file == NULL) {
+    return;
+  }
+
   char magic[5] = {'\0'};
   int todos_count = 0;
   // check the "TODD" (without the \0) magic value
@@ -316,6 +322,8 @@ int main(int argc, char **argv) {
     snprintf(SAVE_FILE, MAX_PATH_LENGTH, "%s/.todos.todd", homedir);
   }
 
+  // if file exists, load it
+  load_from_file_handler();
   initialize_curses(&terminal_width, &terminal_height);
 
   while (running) {

@@ -1,0 +1,33 @@
+name: Build Todd
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-linux-x86:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup GCC
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: latest
+          platform: x86
+      - name: Setup ncurses
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libncurses5-dev
+          version: 1.0
+      - name: Build
+        run: |
+          mkdir build
+          make
+          cp todd build/todd
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: todd-linux-x86
+          path: build
+
+

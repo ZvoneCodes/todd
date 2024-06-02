@@ -17,13 +17,14 @@
 #define COMPLETED_PAIR 3
 
 #include "3rd-party/stb-ds.h"
-#define KEY_BINDINGS " [a]dd [m]ark [d]elete [w]rite [l]oad [q]uit"
+#define KEY_BINDINGS " [a]dd [v]view [m]ark [d]elete [w]rite [l]oad [q]uit"
 
 char SAVE_FILE[MAX_PATH_LENGTH] = "";
 TodoItem *todos = NULL;
 
 enum Command {
   ADD = 'a',
+  VIEW = 'v',
   MARK = 'm',
   REMOVE = 'd',
   QUIT = 'q',
@@ -227,6 +228,12 @@ void add_command_handler(int width, int height) {
   arrput(todos, item);
 }
 
+void view_command_handler(int width, int index) {
+  TodoItem item = todos[index];
+  // create an alert in the middle of the screen
+  alert(item.title, width, 24);
+}
+
 void mark_command_handler(int index) {
   TodoItem item = todos[index];
 
@@ -354,6 +361,9 @@ int main(int argc, char **argv) {
       case ADD:
         add_command_handler(terminal_width, terminal_height);
         break;
+      case VIEW:
+        view_command_handler(terminal_width, current_line);
+        break;
       case MARK:
       case SPACE:
         mark_command_handler(current_line);
@@ -385,8 +395,6 @@ int main(int argc, char **argv) {
   }
 
   endwin();
-
-
 
   return 0;
 }

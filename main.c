@@ -17,6 +17,7 @@
 #define COMPLETED_PAIR 3
 
 #include "3rd-party/stb-ds.h"
+#define KEY_BINDINGS " [a]dd [m]ark [d]elete [w]rite [l]oad [q]uit"
 
 char SAVE_FILE[MAX_PATH_LENGTH] = "";
 TodoItem *todos = NULL;
@@ -94,10 +95,13 @@ void draw_footer(int width, int height) {
   // print the string
   printw("%d/%d", marked_count, todos_count);
 
-  // print the rest of the line
-  for (int i = length; i < width - 1; i++) {
+  // print the rest of the line but leave space for the key bindings
+  for (unsigned long i = length; i < width - strlen(KEY_BINDINGS) - 1; i++) {
     addch(' ');
   }
+
+  // print the key bindings
+  printw(KEY_BINDINGS);
 
   attroff(COLOR_PAIR(BORDERS_PAIR));
 }

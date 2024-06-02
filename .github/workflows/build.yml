@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-linux:
 
     runs-on: ubuntu-latest
 
@@ -19,4 +19,12 @@ jobs:
         version: "1.0"
     - name: make
       run: make
+    - name: copy to build folder
+      run: |
+        mkdir -p build
+        cp ./todd build/
+    - uses: actions/upload-artifact@v4
+      with:
+        name: todd-linux
+        path: build
 

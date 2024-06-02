@@ -19,6 +19,7 @@
 #include "3rd-party/stb-ds.h"
 #define KEY_BINDINGS " [a]dd [v]view [m]ark [d]elete [w]rite [l]oad [q]uit"
 
+bool dirty = false;
 char SAVE_FILE[MAX_PATH_LENGTH] = "";
 TodoItem *todos = NULL;
 
@@ -106,7 +107,7 @@ void draw_footer(int width, int height) {
   attroff(COLOR_PAIR(BORDERS_PAIR));
 }
 
-void alert(const char *message, int terminal_width, int terminal_height) {
+char alert(const char *message, int terminal_width, int terminal_height) {
   int window_height = 5;
   int window_width = terminal_width - 4;
   int window_y = terminal_height / 2 - 1;
@@ -124,10 +125,12 @@ void alert(const char *message, int terminal_width, int terminal_height) {
   // refresh the window
   wrefresh(alert_window);
   // wait for a key press
-  getch();
+  char key = getch();
 
   // delete the window
   delwin(alert_window);
+
+  return key;
 }
 
 void input_string(int terminal_width, int terminal_height, char *buffer, int buffer_size) {
@@ -226,6 +229,9 @@ void add_command_handler(int width, int height) {
 
   TodoItem item = todo_create_item(title);
   arrput(todos, item);
+
+  // set the dirty flag
+  dirty = true;
 }
 
 void view_command_handler(int width, int height, int index) {
@@ -240,10 +246,16 @@ void mark_command_handler(int index) {
   todo_mark_item(&item, !item.completed);
 
   todos[index] = item;
+
+  // set the dirty flag
+  dirty = true;
 }
 
 void remove_command_handler(int index) {
   arrdel(todos, index);
+
+  // set the dirty flag
+  dirty = true;
 }
 
 void write_to_file_handler(void) {
@@ -261,6 +273,8 @@ void write_to_file_handler(void) {
     free(buffer);
   }
   fclose(file);
+  // reset the dirty flag
+  dirty = false;
 }
 
 void load_from_file_handler(void) {
@@ -312,6 +326,9 @@ void load_from_file_handler(void) {
     // add the item to the list
     arrput(todos, item);
   }
+
+  // reset the dirty flag
+  dirty = false;
 }
 
 int main(int argc, char **argv) {
@@ -375,6 +392,12 @@ int main(int argc, char **argv) {
         }
         break;
       case QUIT:
+        if (dirty) {
+          key = alert("You have unsaved changes. Save changes? [y/n]", terminal_width, terminal_height);
+          if (key == 'y') {
+            write_to_file_handler();
+          }
+        }
         running = 0;
         break;
       case UP:

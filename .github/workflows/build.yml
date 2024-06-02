@@ -28,3 +28,20 @@ jobs:
         name: todd-linux
         path: build
 
+  build-mac:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: make
+      run: make
+    - name: copy to build folder
+      run: |
+        mkdir -p build
+        cp ./todd build/
+    - uses: actions/upload-artifact@v4
+      with:
+        name: todd-mac
+        path: build
+

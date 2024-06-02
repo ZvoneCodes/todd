@@ -228,10 +228,10 @@ void add_command_handler(int width, int height) {
   arrput(todos, item);
 }
 
-void view_command_handler(int width, int index) {
+void view_command_handler(int width, int height, int index) {
   TodoItem item = todos[index];
   // create an alert in the middle of the screen
-  alert(item.title, width, 24);
+  alert(item.title, width, height);
 }
 
 void mark_command_handler(int index) {
@@ -362,7 +362,7 @@ int main(int argc, char **argv) {
         add_command_handler(terminal_width, terminal_height);
         break;
       case VIEW:
-        view_command_handler(terminal_width, current_line);
+        view_command_handler(terminal_width, terminal_height, current_line);
         break;
       case MARK:
       case SPACE:

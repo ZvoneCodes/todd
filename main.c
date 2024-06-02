@@ -25,7 +25,6 @@ TodoItem *todos = NULL;
 enum Command {
   ADD = 'a',
   MARK = 'm',
-  PRINT = 'p',
   REMOVE = 'd',
   QUIT = 'q',
 

@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #define MAX_TODOS UINT_MAX
 #define MAX_PATH_LENGTH 1024
@@ -299,6 +302,14 @@ int main(int argc, char **argv) {
   // set the save file path if provided
   if (argc > 1 && strlen(argv[1]) < MAX_PATH_LENGTH) {
     strncpy(SAVE_FILE, argv[1], MAX_PATH_LENGTH);
+  } else {
+    // load the default save file which is "~/.todos.todd"
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+    // check if we have enough space to store the path
+    assert(strlen(homedir) + strlen("/.todos.todd") < MAX_PATH_LENGTH);
+    // create the path
+    snprintf(SAVE_FILE, MAX_PATH_LENGTH, "%s/.todos.todd", homedir);
   }
 
   initialize_curses(&terminal_width, &terminal_height);

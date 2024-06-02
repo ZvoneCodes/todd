@@ -120,7 +120,7 @@ void alert(const char *message, int terminal_width, int terminal_height) {
   // draw a border around the window
   box(alert_window, 0, 0);
   // print the message in the middle of the window
-  mvwprintw(alert_window, message_y, message_x, message);
+  mvwprintw(alert_window, message_y, message_x, "%s", message);
   // refresh the window
   wrefresh(alert_window);
   // wait for a key press

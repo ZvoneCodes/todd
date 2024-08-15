@@ -61,7 +61,7 @@ jobs:
           install: >-
             gcc
             make
-            ncurses
+            ncurses-devel
       - name: make
         run: make
       - name: copy to build folder

@@ -3,6 +3,7 @@
 ## Requirements
 - GCC
 - GNU Make
+- ncurses development libraries
 ## Building
 To build `todd` all you need to do is run `make`.
 ## 3rd Party

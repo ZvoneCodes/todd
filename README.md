@@ -1,3 +1,5 @@
+# NOTE: Development moved to: https://gitea.zvonimir.xyz/zvonimir/todd
+
 # Todd
 `todd` is a to-do app written in C.
 ## Requirements
